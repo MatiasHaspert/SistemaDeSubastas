@@ -31,20 +31,20 @@ public class GestorSubasta {
         try {
             objOut.writeObject(mensaje);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al enviar mensaje individual al cliente: " + e.getMessage());
         }
     }
 
-    public void enviarActualizacionGlobal(int opcion) {
-        String mensaje = null;
-        switch (opcion) {
-            case 1:
+    public void enviarActualizacionGlobal(MensajeGlobal eventoSubasta) {
+        String mensaje  = null;
+        switch (eventoSubasta) {
+            case INICIO_SUBASTA:
                 mensaje = String.format("Se ha iniciado una subasta. \n" +
                         "Subastador: %s\n" +
                         "Producto a subastar: \n%s\n" +
                         "Duracion de la subasta: %d", subasta.getSubastador().getNombre(), subasta.getArticulo(), subasta.getTiempo());
                 break;
-            case 2:
+            case FIN_SUBASTA:
                 if (subasta.getOfertaMayor() == null) {
                     mensaje = "La subasta ha finalizado sin ofertas para el siguiente articulo: \n" + subasta.getArticulo();
                 } else {
@@ -54,16 +54,16 @@ public class GestorSubasta {
                     almacenarSubasta();
                 }
                 break;
-            case 3:
+            case NUEVA_OFERTA:
                 mensaje = String.format("Se ha registrado una nueva oferta mayor \n" +
                         "Ofertante: %s\n" +
                         "Monto: $%.2f", subasta.getOfertaMayor().getParticipante().getNombre(), subasta.getOfertaMayor().getMonto());
                 break;
-            case 4:
+            case AVISO_TIEMPO:
                 mensaje = "Quedan 10 segundos para que finalice la subasta!";
                 break;
-            case 5:
-                mensaje = "Subastador desconectado! Fin de la subasta.";
+            case SUBASTADOR_DESCONECTADO:
+                mensaje = "Subastador desconectado! La subasta queda cancelada.";
                 break;
         }
 
@@ -73,7 +73,7 @@ public class GestorSubasta {
                     objOut.writeObject(mensaje);
                     objOut.flush();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.err.println("Error al enviar mensaje global a los clientes: " + e.getMessage());
                 }
             }
         }
@@ -107,13 +107,21 @@ public class GestorSubasta {
             escritor.write(texto);
             System.out.println("Subasta almacenada en: " + archivo.getAbsolutePath());
         } catch (IOException e) {
-            System.out.println("Ocurrió un error al escribir en el archivo.");
-            e.printStackTrace();
+            System.err.println("Ocurrió un error al escribir en el archivo: " + e.getMessage());
         }
     }
 
-    public void manejarConexionSubastador(HiloSubastador hiloSubastador){
-            new Thread(hiloSubastador).start();
+    public void finalizarSubasta(MensajeGlobal eventoFinSubasta){
+        finalizarTemporizador();
+        subastaActiva = false;
+        enviarActualizacionGlobal(MensajeGlobal.FIN_SUBASTA);
+        if(eventoFinSubasta == MensajeGlobal.FIN_SUBASTA){
+            System.out.println("Subasta finalizada por tiempo cumplido");
+        }else{
+            System.out.println("Subasta finalizada por desconexión del subastador");
+            subastadorConectado = false;
+        }
+
     }
 
     public void iniciarTemporizador(){
@@ -123,16 +131,13 @@ public class GestorSubasta {
             @Override
             public void run() {
                 if(tiempoRestante == 10){
-                    enviarActualizacionGlobal(4);
+                    System.out.println("Quedan 10 segundos para que finalice la subasta actual");
+                    enviarActualizacionGlobal(MensajeGlobal.AVISO_TIEMPO);
                 }
                 if(tiempoRestante == 0){
-                    subastaActiva = false;
-                    enviarActualizacionGlobal(2);
-                    temporizador.cancel();
-                    System.out.println("Subasta finalizada. Aguardando comienzo de la siguiente.");
+                    finalizarSubasta(MensajeGlobal.FIN_SUBASTA);
                 }else{
                     tiempoRestante--;
-                    System.out.println("Quedan " + tiempoRestante + " segundos");
                 }
             }
         },0,1000);
@@ -141,6 +146,29 @@ public class GestorSubasta {
     public void finalizarTemporizador(){
         temporizador.cancel();
     }
+
+    public void reiniciarTemporizador(){
+        finalizarTemporizador();
+        setTiempoRestante(getSubasta().getTiempo());
+        iniciarTemporizador();
+    }
+
+    public void manejarConexionSubastador(HiloSubastador hiloSubastador){
+        new Thread(hiloSubastador).start();
+    }
+
+    public void manejarConexionParticipante(HiloParticipante hiloParticipante) {
+        new Thread(hiloParticipante).start();
+    }
+
+    public void agregarCliente(ObjectOutputStream obj){
+        clientesConectados.add(obj);
+    }
+
+    public void eliminarCliente(ObjectOutputStream obj){
+        clientesConectados.remove(obj);
+    }
+
     public boolean isSubastadorConectado(){
         return this.subastadorConectado;
     }
@@ -165,14 +193,6 @@ public class GestorSubasta {
         this.subasta = subasta;
     }
 
-    public void agregarCliente(ObjectOutputStream obj){
-        clientesConectados.add(obj);
-    }
-
-    public void eliminarCliente(ObjectOutputStream obj){
-        clientesConectados.remove(obj);
-    }
-
     public int getTiempoRestante(){
         return this.tiempoRestante;
     }
@@ -180,7 +200,5 @@ public class GestorSubasta {
     public void setTiempoRestante(int tiempoRestante){
         this.tiempoRestante = tiempoRestante;
     }
-    public void manejarConexionParticipante(HiloParticipante hiloParticipante) {
-        new Thread(hiloParticipante).start();
-    }
+
 }

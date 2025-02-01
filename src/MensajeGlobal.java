@@ -1,0 +1,7 @@
+public enum MensajeGlobal {
+    INICIO_SUBASTA,
+    FIN_SUBASTA,
+    NUEVA_OFERTA,
+    AVISO_TIEMPO,
+    SUBASTADOR_DESCONECTADO
+}

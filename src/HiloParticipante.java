@@ -36,7 +36,8 @@ public class HiloParticipante implements Runnable{
                             ,objectOut);
         }
         int opcion;
-        while(true){
+        boolean salir = false;
+        while(!salir){
             try {
                 opcion = dataIn.readInt();
                 switch (opcion) {
@@ -47,13 +48,7 @@ public class HiloParticipante implements Runnable{
                             Oferta ofertaCliente = (Oferta) objectIn.readObject();
                             if ((gestorSubasta.getSubasta().getOfertaMayor() == null && ofertaCliente.getMonto() >= gestorSubasta.getSubasta().getArticulo().getPrecioBase()) ||
                                     (gestorSubasta.getSubasta().getOfertaMayor() != null && ofertaCliente.getMonto() >= gestorSubasta.getSubasta().getOfertaMayor().getMonto())) {
-                                gestorSubasta.getSubasta().setOfertaMayor(ofertaCliente);
-                                gestorSubasta.finalizarTemporizador();
-                                gestorSubasta.setTiempoRestante(gestorSubasta.getSubasta().getTiempo());
-                                gestorSubasta.iniciarTemporizador();
-                                System.out.println("Actualizacion realizada, nueva oferta mayor: " + gestorSubasta.getSubasta().getOfertaMayor().getMonto());
-                                gestorSubasta.enviarMensajeIndividual("Oferta recibida correctamente. Actualmente tu oferta es la mayor", objectOut);
-                                gestorSubasta.enviarActualizacionGlobal(3);
+                                fijarOfertaMayor(ofertaCliente);
                             } else if(gestorSubasta.getSubasta().getOfertaMayor() == null && gestorSubasta.getSubasta().getArticulo().getPrecioBase() > ofertaCliente.getMonto()) {
                                 gestorSubasta.enviarMensajeIndividual("Oferta rechazada. La oferta realizada no supera el precio base", objectOut);
                             }else{
@@ -62,28 +57,39 @@ public class HiloParticipante implements Runnable{
                         }
                         break;
                     case 2:
+                        salir = true;
+                        manejarDesconexionParticipante();
+                        System.out.println("El subastador se ha desconectado correctamente");
                         break;
                     default:
                         gestorSubasta.enviarMensajeIndividual("Debes ingresar una opción valida", objectOut);
                 }
             }catch (IOException e){
-                System.out.println("El cliente se ha desconectado: " + socket.getInetAddress());
+                System.err.println("Error en el socket: " + e.getMessage());
                 manejarDesconexionParticipante();
                 break; // Salir del metodo run
-            }catch (Exception e){
-                e.printStackTrace();
+            }catch (ClassNotFoundException e){
+                System.err.println("Error al leer el objeto oferta: " + e.getMessage());
             }
         }
     }
 
     private void manejarDesconexionParticipante() {
+        gestorSubasta.eliminarCliente(objectOut);
         try {
-            gestorSubasta.eliminarCliente(objectOut);
             socket.close();
-            System.out.println("Recursos liberados para el cliente desconectado.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al cerrar el socket: " + e.getMessage());
         }
     }
+
+    private synchronized void fijarOfertaMayor(Oferta ofertaCliente){
+        gestorSubasta.getSubasta().setOfertaMayor(ofertaCliente);
+        gestorSubasta.reiniciarTemporizador();
+        System.out.println("Actualizacion realizada, nueva oferta mayor: " + gestorSubasta.getSubasta().getOfertaMayor().getMonto() + ".\nOfertante: "+ gestorSubasta.getSubasta().getOfertaMayor().getParticipante().getNombre());
+        gestorSubasta.enviarMensajeIndividual("Oferta recibida correctamente. Actualmente tu oferta es la mayor", objectOut);
+        gestorSubasta.enviarActualizacionGlobal(MensajeGlobal.NUEVA_OFERTA);
+    }
 }
+
 

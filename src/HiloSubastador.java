@@ -23,7 +23,8 @@ public class HiloSubastador implements Runnable{
     @Override
     public void run() {
         int opcion;
-        while(true){
+        boolean salir = false;
+        while(!salir){
             try{
                 opcion = dataIn.readInt();
                 switch (opcion){
@@ -37,35 +38,40 @@ public class HiloSubastador implements Runnable{
                             gestorSubasta.iniciarTemporizador();
                             System.out.println("Subasta iniciada correctamente");
                             gestorSubasta.enviarMensajeIndividual("Subasta iniciada correctamente", objectOut);
-                            gestorSubasta.enviarActualizacionGlobal(1);
+                            gestorSubasta.enviarActualizacionGlobal(MensajeGlobal.INICIO_SUBASTA);
                         }
                         break;
                     case 2:
+                        salir = true;
+                        if(gestorSubasta.isSubastaActiva()){
+                            gestorSubasta.finalizarSubasta(MensajeGlobal.SUBASTADOR_DESCONECTADO);
+                            manejarDesconexionSubastador();
+                        }else{
+                            gestorSubasta.setSubastadorConectado(false);
+                            manejarDesconexionSubastador();
+                        }
+                        System.out.println("El subastador se ha desconectado correctamente.");
                         break;
                     default:
                         gestorSubasta.enviarMensajeIndividual("Debes ingresar una opción valida", objectOut);
                 }
             }catch (IOException e){
-                System.out.println("El cliente se ha desconectado: " + socket.getInetAddress());
+                System.err.println("Error en el socket: " + e.getMessage());
+                e.printStackTrace();
                 manejarDesconexionSubastador();
                 break;
-            }catch (Exception e){
-                e.printStackTrace();
+            }catch (ClassNotFoundException e){
+                System.err.println("Error al leer el objeto subasta: " + e.getMessage());
             }
         }
     }
 
     private void manejarDesconexionSubastador() {
+        gestorSubasta.eliminarCliente(objectOut);
         try {
-            gestorSubasta.eliminarCliente(objectOut);
             socket.close();
-            gestorSubasta.setSubastadorConectado(false);
-            gestorSubasta.setSubastaActiva(false);
-            System.out.println("El subastador se ha desconectado.");
-            gestorSubasta.finalizarTemporizador();
-            gestorSubasta.enviarActualizacionGlobal(5);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al cerrar el socket: " + e.getMessage());
         }
     }
 }
