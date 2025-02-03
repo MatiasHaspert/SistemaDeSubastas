@@ -114,7 +114,7 @@ public class GestorSubasta {
     public void finalizarSubasta(MensajeGlobal eventoFinSubasta){
         finalizarTemporizador();
         subastaActiva = false;
-        enviarActualizacionGlobal(MensajeGlobal.FIN_SUBASTA);
+        enviarActualizacionGlobal(MensajeGlobal.SUBASTADOR_DESCONECTADO);
         if(eventoFinSubasta == MensajeGlobal.FIN_SUBASTA){
             System.out.println("Subasta finalizada por tiempo cumplido");
         }else{
