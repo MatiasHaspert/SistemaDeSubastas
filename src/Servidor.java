@@ -33,13 +33,12 @@ public class Servidor{
         try{
             ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
             ObjectInputStream objectIn = new ObjectInputStream(socket.getInputStream());
-            DataOutputStream dataOut = new DataOutputStream(socket.getOutputStream());
             DataInputStream dataIn = new DataInputStream(socket.getInputStream());
             Usuario usuario = (Usuario) objectIn.readObject();
             if(usuario.getRol() == Rol.SUBASTADOR){
-                gestionarSubastador(socket,usuario, objectOut, objectIn, dataOut, dataIn);
+                gestionarSubastador(socket, usuario, objectOut, objectIn, dataIn);
             }else{
-                gestionarParticipante(socket,usuario,objectOut,objectIn,dataOut,dataIn);
+                gestionarParticipante(socket, usuario, objectOut, objectIn, dataIn);
             }
         }catch(IOException e){
             System.err.println("Error al establecer la conexion inicial con el cliente: " + e.getMessage());
@@ -49,8 +48,7 @@ public class Servidor{
     }
 
     private static void gestionarSubastador(Socket socket, Usuario usuario, ObjectOutputStream objOut,
-                                            ObjectInputStream objIn, DataOutputStream dataOut,
-                                            DataInputStream dataIn) throws IOException{
+                                            ObjectInputStream objIn, DataInputStream dataIn) throws IOException{
         if(gestorSubasta.isSubastadorConectado()){
             System.out.println("Fallo al ingresar subastador. Ya hay un subastador conectado.");
             gestorSubasta.enviarMensajeIndividual("Ya hay un subastador. No puedes conectarte como subastador en este momento. Intentalo mas tarde",objOut);
@@ -60,21 +58,15 @@ public class Servidor{
             gestorSubasta.enviarMensajeIndividual("Te has conectado correctamente al servidor como subastador",objOut);
             gestorSubasta.setSubastadorConectado(true);
             gestorSubasta.agregarCliente(objOut);
-            gestorSubasta.manejarConexionSubastador(new HiloSubastador(socket,objOut,objIn,dataOut,dataIn,gestorSubasta));
+            gestorSubasta.manejarConexionSubastador(new HiloSubastador(socket,objOut,objIn,dataIn,gestorSubasta));
         }
     }
 
     private static void gestionarParticipante(Socket socket, Usuario usuario, ObjectOutputStream objOut,
-                                              ObjectInputStream objIn, DataOutputStream dataOut,
-                                              DataInputStream dataIn) throws IOException{
+                                              ObjectInputStream objIn, DataInputStream dataIn) throws IOException{
         System.out.println("Participante conectado.\nNombre: " + usuario.getNombre() + "\nEmail: " + usuario.getEmail());
         gestorSubasta.enviarMensajeIndividual("Te has conectado correctamente al servidor como participante",objOut);
         gestorSubasta.agregarCliente(objOut);
-        gestorSubasta.manejarConexionParticipante(new HiloParticipante(socket,objOut,objIn,dataOut,dataIn,gestorSubasta));
-
-    }
-
-    public GestorSubasta getGestorSubasta() {
-        return gestorSubasta;
+        gestorSubasta.manejarConexionParticipante(new HiloParticipante(socket,objOut,objIn,dataIn,gestorSubasta));
     }
 }
