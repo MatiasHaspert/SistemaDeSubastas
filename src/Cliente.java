@@ -125,7 +125,7 @@ public class Cliente {
                     if(msg.contains("Ya hay una subasta activa") || msg.contains("Se ha iniciado una subasta") || msg.contains("Hay una subasta en curso")){
                         subastaActiva = true;
                     }
-                    else if(msg.contains("La subasta ha finalizado") || msg.contains("Subastador desconectado! Fin de la subasta.")){
+                    else if(msg.contains("La subasta ha finalizado") || msg.contains("Subastador desconectado! La subasta queda cancelada.")){
                         subastaActiva = false;
                     }
                 }

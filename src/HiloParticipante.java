@@ -76,7 +76,9 @@ public class HiloParticipante implements Runnable{
     private void manejarDesconexionParticipante() {
         gestorSubasta.eliminarCliente(objectOut);
         try {
-            socket.close();
+            if(socket != null){
+                socket.close();
+            }
         } catch (IOException e) {
             System.err.println("Error al cerrar el socket: " + e.getMessage());
         }
