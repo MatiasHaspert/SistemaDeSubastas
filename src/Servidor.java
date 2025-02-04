@@ -36,9 +36,9 @@ public class Servidor{
             DataInputStream dataIn = new DataInputStream(socket.getInputStream());
             Usuario usuario = (Usuario) objectIn.readObject();
             if(usuario.getRol() == Rol.SUBASTADOR){
-                gestionarSubastador(socket, usuario, objectOut, objectIn, dataIn);
+                gestionarSubastador(socket,usuario, objectOut, objectIn, dataIn);
             }else{
-                gestionarParticipante(socket, usuario, objectOut, objectIn, dataIn);
+                gestionarParticipante(socket,usuario,objectOut,objectIn,dataIn);
             }
         }catch(IOException e){
             System.err.println("Error al establecer la conexion inicial con el cliente: " + e.getMessage());
@@ -68,5 +68,11 @@ public class Servidor{
         gestorSubasta.enviarMensajeIndividual("Te has conectado correctamente al servidor como participante",objOut);
         gestorSubasta.agregarCliente(objOut);
         gestorSubasta.manejarConexionParticipante(new HiloParticipante(socket,objOut,objIn,dataIn,gestorSubasta));
+
+
+    }
+
+    public GestorSubasta getGestorSubasta() {
+        return gestorSubasta;
     }
 }

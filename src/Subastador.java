@@ -11,15 +11,15 @@ public class Subastador extends Usuario implements Serializable {
     public Articulo generarArticuloASubastar(){
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Ingrese el nombre del artículo: ");
+        System.out.println("Ingrese el nombre del articulo: ");
         String nombreArticulo = scanner.nextLine();
 
-        System.out.println("Ingrese la descripción del artículo: ");
+        System.out.println("Ingrese la descripcion del articulo: ");
         String descripcionArticulo = scanner.nextLine();
 
         float precioBaseArticulo = 0;
         boolean precioValido = false;
-        System.out.println("Ingrese el precio base del artículo (Debe ser mayor a 0): ");
+        System.out.println("Ingrese el precio base del articulo (Debe ser mayor a 0): ");
         do{
             try{
                 precioBaseArticulo = Float.parseFloat(scanner.nextLine());
@@ -51,7 +51,7 @@ public class Subastador extends Usuario implements Serializable {
                     System.out.println("El tiempo debe estar entre 30 y 120 segundos. Intente nuevamente.");
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Ingrese un número válido. Intente nuevamente.");
+                System.out.println("Ingrese un número valido. Intente nuevamente.");
             }
         }while(!tiempoValido);
 

@@ -55,7 +55,6 @@ public class HiloSubastador implements Runnable{
                 }
             }catch (IOException e){
                 System.err.println("Error en el socket: " + e.getMessage());
-                e.printStackTrace();
                 manejarDesconexionSubastador();
                 break;
             }catch (ClassNotFoundException e){

@@ -58,7 +58,7 @@ public class HiloParticipante implements Runnable{
                     case 2:
                         salir = true;
                         manejarDesconexionParticipante();
-                        System.out.println("El subastador se ha desconectado correctamente");
+                        System.out.println("El participante se ha desconectado correctamente");
                         break;
                     default:
                         gestorSubasta.enviarMensajeIndividual("Debes ingresar una opción valida", objectOut);
@@ -66,7 +66,7 @@ public class HiloParticipante implements Runnable{
             }catch (IOException e){
                 System.err.println("Error en el socket: " + e.getMessage());
                 manejarDesconexionParticipante();
-                break; // Salir del metodo run
+                break;
             }catch (ClassNotFoundException e){
                 System.err.println("Error al leer el objeto oferta: " + e.getMessage());
             }

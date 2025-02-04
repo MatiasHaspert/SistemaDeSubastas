@@ -39,25 +39,31 @@ public class GestorSubasta {
         String mensaje  = null;
         switch (eventoSubasta) {
             case INICIO_SUBASTA:
-                mensaje = String.format("Se ha iniciado una subasta. \n" +
-                        "Subastador: %s\n" +
-                        "Producto a subastar: \n%s\n" +
-                        "Duracion de la subasta: %d", subasta.getSubastador().getNombre(), subasta.getArticulo(), subasta.getTiempo());
+                mensaje = String.format(
+                                        "Se ha iniciado una subasta. \n" +
+                                        "Subastador: %s\n" +
+                                        "Producto a subastar: \n%s\n" +
+                                        "Duracion de la subasta: %d segundos",
+                        subasta.getSubastador().getNombre(), subasta.getArticulo(), subasta.getTiempo());
                 break;
             case FIN_SUBASTA:
                 if (subasta.getOfertaMayor() == null) {
                     mensaje = "La subasta ha finalizado sin ofertas para el siguiente articulo: \n" + subasta.getArticulo();
                 } else {
-                    mensaje = String.format("La subasta ha finalizado.\n" +
-                            "Ganador: %s\n" +
-                            "Monto final: $%.2f", subasta.getOfertaMayor().getParticipante().getNombre(), subasta.getOfertaMayor().getMonto());
+                    mensaje = String.format(
+                                            "La subasta ha finalizado.\n" +
+                                            "Ganador: %s\n" +
+                                            "Monto final: $%.2f",
+                            subasta.getOfertaMayor().getParticipante().getNombre(), subasta.getOfertaMayor().getMonto());
                     almacenarSubasta();
                 }
                 break;
             case NUEVA_OFERTA:
-                mensaje = String.format("Se ha registrado una nueva oferta mayor \n" +
-                        "Ofertante: %s\n" +
-                        "Monto: $%.2f", subasta.getOfertaMayor().getParticipante().getNombre(), subasta.getOfertaMayor().getMonto());
+                mensaje = String.format(
+                                          "Se ha registrado una nueva oferta mayor \n" +
+                                          "Ofertante: %s\n" +
+                                          "Monto: $%.2f",
+                        subasta.getOfertaMayor().getParticipante().getNombre(), subasta.getOfertaMayor().getMonto());
                 break;
             case AVISO_TIEMPO:
                 mensaje = "Quedan 10 segundos para que finalice la subasta!";
@@ -114,7 +120,9 @@ public class GestorSubasta {
     public void finalizarSubasta(MensajeGlobal eventoFinSubasta){
         finalizarTemporizador();
         subastaActiva = false;
-        enviarActualizacionGlobal(MensajeGlobal.SUBASTADOR_DESCONECTADO);
+
+        enviarActualizacionGlobal(eventoFinSubasta);
+
         if(eventoFinSubasta == MensajeGlobal.FIN_SUBASTA){
             System.out.println("Subasta finalizada por tiempo cumplido");
         }else{
