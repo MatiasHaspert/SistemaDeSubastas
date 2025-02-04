@@ -5,16 +5,14 @@ public class HiloSubastador implements Runnable{
     private Socket socket;
     private ObjectOutputStream objectOut;
     private ObjectInputStream objectIn;
-    private DataOutputStream dataOut;
     private DataInputStream dataIn;
     private GestorSubasta gestorSubasta;
 
     public HiloSubastador(Socket socket, ObjectOutputStream objectOut, ObjectInputStream objectIn,
-                          DataOutputStream dataOut, DataInputStream dataIn, GestorSubasta gs){
+                          DataInputStream dataIn, GestorSubasta gs){
         this.socket = socket;
         this.objectOut = objectOut;
         this.objectIn = objectIn;
-        this.dataOut = dataOut;
         this.dataIn = dataIn;
         this.gestorSubasta = gs;
         System.out.println("Hilo Subastador creado correctamente");
@@ -57,7 +55,6 @@ public class HiloSubastador implements Runnable{
                 }
             }catch (IOException e){
                 System.err.println("Error en el socket: " + e.getMessage());
-                e.printStackTrace();
                 manejarDesconexionSubastador();
                 break;
             }catch (ClassNotFoundException e){

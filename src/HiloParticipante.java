@@ -5,15 +5,13 @@ public class HiloParticipante implements Runnable{
     private Socket socket;
     private ObjectOutputStream objectOut;
     private ObjectInputStream objectIn;
-    private DataOutputStream dataOut;
     private DataInputStream dataIn;
     private GestorSubasta gestorSubasta;
     public HiloParticipante(Socket socket, ObjectOutputStream objectOut, ObjectInputStream objectIn,
-                            DataOutputStream dataOut, DataInputStream dataIn, GestorSubasta gs){
+                            DataInputStream dataIn, GestorSubasta gs){
         this.socket = socket;
         this.objectOut = objectOut;
         this.objectIn = objectIn;
-        this.dataOut = dataOut;
         this.dataIn = dataIn;
         this.gestorSubasta = gs;
         System.out.println("Hilo Participante creado correctamente");
@@ -47,7 +45,7 @@ public class HiloParticipante implements Runnable{
                         } else {
                             Oferta ofertaCliente = (Oferta) objectIn.readObject();
                             if ((gestorSubasta.getSubasta().getOfertaMayor() == null && ofertaCliente.getMonto() >= gestorSubasta.getSubasta().getArticulo().getPrecioBase()) ||
-                                    (gestorSubasta.getSubasta().getOfertaMayor() != null && ofertaCliente.getMonto() >= gestorSubasta.getSubasta().getOfertaMayor().getMonto())) {
+                                    (gestorSubasta.getSubasta().getOfertaMayor() != null && ofertaCliente.getMonto() > gestorSubasta.getSubasta().getOfertaMayor().getMonto())) {
                                 fijarOfertaMayor(ofertaCliente);
                             } else if(gestorSubasta.getSubasta().getOfertaMayor() == null && gestorSubasta.getSubasta().getArticulo().getPrecioBase() > ofertaCliente.getMonto()) {
                                 gestorSubasta.enviarMensajeIndividual("Oferta rechazada. La oferta realizada no supera el precio base", objectOut);
@@ -59,7 +57,7 @@ public class HiloParticipante implements Runnable{
                     case 2:
                         salir = true;
                         manejarDesconexionParticipante();
-                        System.out.println("El subastador se ha desconectado correctamente");
+                        System.out.println("El participante se ha desconectado correctamente");
                         break;
                     default:
                         gestorSubasta.enviarMensajeIndividual("Debes ingresar una opción valida", objectOut);
@@ -67,7 +65,7 @@ public class HiloParticipante implements Runnable{
             }catch (IOException e){
                 System.err.println("Error en el socket: " + e.getMessage());
                 manejarDesconexionParticipante();
-                break; // Salir del metodo run
+                break;
             }catch (ClassNotFoundException e){
                 System.err.println("Error al leer el objeto oferta: " + e.getMessage());
             }
