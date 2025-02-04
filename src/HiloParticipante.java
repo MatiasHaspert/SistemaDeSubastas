@@ -7,6 +7,7 @@ public class HiloParticipante implements Runnable{
     private ObjectInputStream objectIn;
     private DataInputStream dataIn;
     private GestorSubasta gestorSubasta;
+
     public HiloParticipante(Socket socket, ObjectOutputStream objectOut, ObjectInputStream objectIn,
                             DataInputStream dataIn, GestorSubasta gs){
         this.socket = socket;

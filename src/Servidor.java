@@ -69,6 +69,7 @@ public class Servidor{
         gestorSubasta.agregarCliente(objOut);
         gestorSubasta.manejarConexionParticipante(new HiloParticipante(socket,objOut,objIn,dataIn,gestorSubasta));
 
+
     }
 
     public GestorSubasta getGestorSubasta() {

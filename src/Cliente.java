@@ -48,6 +48,7 @@ public class Cliente {
     }
 
     public static void manejarConexionCliente(){
+
         try {
             Cliente.socket = new Socket(Cliente.DIRECCION_SERVIDOR,Cliente.PUERTO);
             ObjectOutputStream objectOut = new ObjectOutputStream(socket.getOutputStream());
@@ -56,10 +57,12 @@ public class Cliente {
             objectOut.writeObject(Cliente.usuario);
             Scanner scanner = new Scanner(System.in);
             int opcion;
+
             boolean salir = false;
             System.out.println("===============================================\n" +
                              "      Bienvenido al sistema de subasta OMv2\n" +
                                "===============================================");
+
             Cliente.hiloDeEscucha(objectIn);
 
             if(Cliente.usuario.getRol() == Rol.SUBASTADOR){
@@ -113,6 +116,7 @@ public class Cliente {
             try{
                 while(true){
                     Object mensaje = objectIn.readObject();
+
                     System.out.println("====================================================================");
                     System.out.println("                 [Notificacion del servidor]\n" + mensaje);
                     System.out.println("====================================================================");
@@ -131,6 +135,7 @@ public class Cliente {
                 System.out.println("Error en el socket " + e.getMessage());
             }catch (ClassNotFoundException e) {
                 System.out.println("Error al leer el mensaje del servidor " + e.getMessage());
+
             }
         }).start();
     }
