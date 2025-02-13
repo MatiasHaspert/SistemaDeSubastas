@@ -7,6 +7,7 @@ public class HiloParticipante implements Runnable{
     private ObjectInputStream objectIn;
     private DataInputStream dataIn;
     private GestorSubasta gestorSubasta;
+
     public HiloParticipante(Socket socket, ObjectOutputStream objectOut, ObjectInputStream objectIn,
                             DataInputStream dataIn, GestorSubasta gs){
         this.socket = socket;
@@ -25,13 +26,13 @@ public class HiloParticipante implements Runnable{
                                     "Producto: \n%s\n" +
                                     "Tiempo restante: %d segundos\n" +
                                     "%s",
-                                    gestorSubasta.getSubasta().getSubastador().getNombre(),
-                                    gestorSubasta.getSubasta().getArticulo(),
-                                    gestorSubasta.getTiempoRestante(),
-                                    gestorSubasta.getSubasta().getOfertaMayor() != null
+                            gestorSubasta.getSubasta().getSubastador().getNombre(),
+                            gestorSubasta.getSubasta().getArticulo(),
+                            gestorSubasta.getTiempoRestante(),
+                            gestorSubasta.getSubasta().getOfertaMayor() != null
                                     ? "Mayor oferta actual: $" + gestorSubasta.getSubasta().getOfertaMayor().getMonto()
                                     : "Aun no hay ofertas para el articulo")
-                            ,objectOut);
+                    ,objectOut);
         }
         int opcion;
         boolean salir = false;
@@ -60,7 +61,7 @@ public class HiloParticipante implements Runnable{
                         System.out.println("El participante se ha desconectado correctamente");
                         break;
                     default:
-                        gestorSubasta.enviarMensajeIndividual("Debes ingresar una opción valida", objectOut);
+                        gestorSubasta.enviarMensajeIndividual("Debes ingresar una opcion valida", objectOut);
                 }
             }catch (IOException e){
                 System.err.println("Error en el socket: " + e.getMessage());
@@ -75,7 +76,9 @@ public class HiloParticipante implements Runnable{
     private void manejarDesconexionParticipante() {
         gestorSubasta.eliminarCliente(objectOut);
         try {
-            socket.close();
+            if(socket != null){
+                socket.close();
+            }
         } catch (IOException e) {
             System.err.println("Error al cerrar el socket: " + e.getMessage());
         }
@@ -89,5 +92,4 @@ public class HiloParticipante implements Runnable{
         gestorSubasta.enviarActualizacionGlobal(MensajeGlobal.NUEVA_OFERTA);
     }
 }
-
 
