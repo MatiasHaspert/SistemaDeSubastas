@@ -43,7 +43,7 @@ public class Cliente {
         System.out.println("Desea ser Subastador o Participante? (Ingrese S o P): ");
         boolean rolValido = false;
         do{
-            rolUsuario = scanner.nextLine();
+            rolUsuario = scanner.nextLine().toUpperCase();
             if(rolUsuario.equals("S") || rolUsuario.equals("P")){
                 rolValido = true;
             }else{
