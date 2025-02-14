@@ -10,12 +10,23 @@ public class Subastador extends Usuario implements Serializable {
 
     public Articulo generarArticuloASubastar(){
         Scanner scanner = new Scanner(System.in);
-
+        String nombreArticulo;
+        String descripcionArticulo;
         System.out.println("Ingrese el nombre del articulo: ");
-        String nombreArticulo = scanner.nextLine();
+        do{
+            nombreArticulo = scanner.nextLine();
+            if(nombreArticulo.length() < 3){
+                System.out.println("El nombre del articulo debe tener al menos 3 caracteres");
+            }
+        }while(nombreArticulo.length() < 3);
 
         System.out.println("Ingrese la descripcion del articulo: ");
-        String descripcionArticulo = scanner.nextLine();
+        do{
+            descripcionArticulo = scanner.nextLine();
+            if(descripcionArticulo.length() < 10){
+                System.out.println("La descripcion del articulo debe tener al menos 10 caracteres");
+            }
+        }while(descripcionArticulo.length() < 10);
 
         float precioBaseArticulo = 0;
         boolean precioValido = false;
@@ -60,6 +71,8 @@ public class Subastador extends Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Nombre: %s\nEmail: %s \n", this.getNombre(), this.getEmail());
+        return String.format("Nombre: %s\n" +
+                            "Email: %s \n",
+                            this.getNombre(), this.getEmail());
     }
 }

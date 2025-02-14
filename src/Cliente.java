@@ -24,10 +24,21 @@ public class Cliente {
         String rolUsuario;
 
         System.out.println("Ingrese su nombre: ");
-        nombreUsuario = scanner.nextLine();
+        do{
+            nombreUsuario = scanner.nextLine();
+            if(nombreUsuario.length() < 3){
+                System.out.println("Debes ingresar un nombre de al menos 3 caracteres");
+            }
+        }while(nombreUsuario.length() < 3);
 
         System.out.println("Ingrese su email: ");
-        emailUsuario = scanner.nextLine();
+        do{
+            emailUsuario = scanner.nextLine();
+            if(emailUsuario.length() < 8 || !emailUsuario.contains("@")){
+                System.out.println("Debes ingresar un email valido");
+            }
+        }while(emailUsuario.length() < 8 || !emailUsuario.contains("@"));
+
 
         System.out.println("Desea ser Subastador o Participante? (Ingrese S o P): ");
         boolean rolValido = false;
@@ -60,8 +71,12 @@ public class Cliente {
 
             boolean salir = false;
             System.out.println("===============================================\n" +
-                             "      Bienvenido al sistema de subasta OMv2\n" +
-                               "===============================================");
+
+                            "      Bienvenido al sistema de subasta OMv2\n" +
+                                "===============================================");
+
+          
+
 
             Cliente.hiloDeEscucha(objectIn);
 
@@ -122,7 +137,8 @@ public class Cliente {
                     System.out.println("====================================================================");
                     System.out.print("[Opcion (1 | 2)]\n");
                     String msg = (String) mensaje;
-                    if(msg.contains("Ya hay una subasta activa") || msg.contains("Se ha iniciado una subasta") || msg.contains("Hay una subasta en curso")){
+                    if(msg.contains("Ya hay una subasta activa") || msg.contains("Se ha iniciado una subasta")
+                            || msg.contains("Hay una subasta en curso") || msg.contains("Ya hay un subastador")){
                         subastaActiva = true;
                     }
                     else if(msg.contains("La subasta ha finalizado") || msg.contains("Subastador desconectado! La subasta queda cancelada.")){

@@ -51,7 +51,7 @@ public class HiloSubastador implements Runnable{
                         System.out.println("El subastador se ha desconectado correctamente.");
                         break;
                     default:
-                        gestorSubasta.enviarMensajeIndividual("Debes ingresar una opción valida", objectOut);
+                        gestorSubasta.enviarMensajeIndividual("Debes ingresar una opcion valida", objectOut);
                 }
             }catch (IOException e){
                 System.err.println("Error en el socket: " + e.getMessage());
@@ -72,4 +72,5 @@ public class HiloSubastador implements Runnable{
         }
     }
 }
+
 

@@ -21,7 +21,7 @@ public class Participante extends Usuario implements Serializable {
                     System.out.println("Debes ingresar un monto mayor a 0. Intente nuevamente");
                 }
             }catch(NumberFormatException e){
-                System.out.println("Debes ingresar un numero válido. Intente nuevamente");
+                System.out.println("Debes ingresar un numero valido. Intente nuevamente");
             }
         }while(!ofertaValida);
         return new Oferta(montoOferta,this);
@@ -29,6 +29,8 @@ public class Participante extends Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Nombre: %s \nEmail: %s",getNombre(),getEmail());
+        return String.format("Nombre: %s \n" +
+                            "Email: %s",
+                            getNombre(),getEmail());
     }
 }
