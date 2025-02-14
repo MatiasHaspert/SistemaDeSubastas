@@ -71,8 +71,12 @@ public class Cliente {
 
             boolean salir = false;
             System.out.println("===============================================\n" +
+
                             "      Bienvenido al sistema de subasta OMv2\n" +
                                 "===============================================");
+
+          
+
 
             Cliente.hiloDeEscucha(objectIn);
 
