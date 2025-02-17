@@ -18,7 +18,7 @@ public class Servidor{
             while(true){
                 try {
                     Socket socket = server.accept();
-                    establecerConexionInicial(socket);
+                    Servidor.establecerConexionInicial(socket);
                 } catch (IOException e) {
                     System.err.println("Error al aceptar la conexión de un cliente: " + e.getMessage());
                 }

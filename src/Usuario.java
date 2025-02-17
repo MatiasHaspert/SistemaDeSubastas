@@ -14,7 +14,6 @@ public abstract class Usuario implements Serializable {
     public String getNombre(){return nombre;}
     public String getEmail(){return email;}
     public Rol getRol(){return rol;}
-    public String verResultadoSubasta(){return "";}
 
     @Override
     public String toString() {

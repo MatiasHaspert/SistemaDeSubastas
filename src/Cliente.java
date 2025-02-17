@@ -97,7 +97,7 @@ public class Cliente {
                             break;
                         case 2:
                             salir = true;
-                            desconexion();
+                            Cliente.desconexion();
                             break;
                     }
                 }
@@ -151,7 +151,6 @@ public class Cliente {
                 System.out.println("Error en el socket " + e.getMessage());
             }catch (ClassNotFoundException e) {
                 System.out.println("Error al leer el mensaje del servidor " + e.getMessage());
-
             }
         }).start();
     }
