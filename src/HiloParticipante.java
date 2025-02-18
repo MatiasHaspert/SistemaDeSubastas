@@ -45,14 +45,7 @@ public class HiloParticipante implements Runnable{
                             gestorSubasta.enviarMensajeIndividual("Espera a que haya una subasta activa para realizar una oferta", objectOut);
                         } else {
                             Oferta ofertaCliente = (Oferta) objectIn.readObject();
-                            if ((gestorSubasta.getSubasta().getOfertaMayor() == null && ofertaCliente.getMonto() >= gestorSubasta.getSubasta().getArticulo().getPrecioBase()) ||
-                                    (gestorSubasta.getSubasta().getOfertaMayor() != null && ofertaCliente.getMonto() > gestorSubasta.getSubasta().getOfertaMayor().getMonto())) {
-                                fijarOfertaMayor(ofertaCliente);
-                            } else if(gestorSubasta.getSubasta().getOfertaMayor() == null && gestorSubasta.getSubasta().getArticulo().getPrecioBase() > ofertaCliente.getMonto()) {
-                                gestorSubasta.enviarMensajeIndividual("Oferta rechazada. La oferta realizada no supera el precio base", objectOut);
-                            }else{
-                                gestorSubasta.enviarMensajeIndividual("Oferta rechazada. La oferta realizada no supera el monto de la oferta mayor", objectOut);
-                            }
+                            fijarOfertaMayor(ofertaCliente);
                         }
                         break;
                     case 2:
@@ -85,11 +78,18 @@ public class HiloParticipante implements Runnable{
     }
 
     private synchronized void fijarOfertaMayor(Oferta ofertaCliente){
-        gestorSubasta.getSubasta().setOfertaMayor(ofertaCliente);
-        gestorSubasta.reiniciarTemporizador();
-        System.out.println("Actualizacion realizada, nueva oferta mayor: " + gestorSubasta.getSubasta().getOfertaMayor().getMonto() + ".\nOfertante: "+ gestorSubasta.getSubasta().getOfertaMayor().getParticipante().getNombre());
-        gestorSubasta.enviarMensajeIndividual("Oferta recibida correctamente. Actualmente tu oferta es la mayor", objectOut);
-        gestorSubasta.enviarActualizacionGlobal(MensajeGlobal.NUEVA_OFERTA);
+        if ((gestorSubasta.getSubasta().getOfertaMayor() == null && ofertaCliente.getMonto() >= gestorSubasta.getSubasta().getArticulo().getPrecioBase()) ||
+                (gestorSubasta.getSubasta().getOfertaMayor() != null && ofertaCliente.getMonto() > gestorSubasta.getSubasta().getOfertaMayor().getMonto())) {
+            gestorSubasta.getSubasta().setOfertaMayor(ofertaCliente);
+            gestorSubasta.reiniciarTemporizador();
+            System.out.println("Actualizacion realizada, nueva oferta mayor: " + gestorSubasta.getSubasta().getOfertaMayor().getMonto() + ".\nOfertante: "+ gestorSubasta.getSubasta().getOfertaMayor().getParticipante().getNombre());
+            gestorSubasta.enviarMensajeIndividual("Oferta recibida correctamente. Actualmente tu oferta es la mayor", objectOut);
+            gestorSubasta.enviarActualizacionGlobal(MensajeGlobal.NUEVA_OFERTA);
+        } else if(gestorSubasta.getSubasta().getOfertaMayor() == null && gestorSubasta.getSubasta().getArticulo().getPrecioBase() > ofertaCliente.getMonto()) {
+            gestorSubasta.enviarMensajeIndividual("Oferta rechazada. La oferta realizada no supera el precio base", objectOut);
+        }else{
+            gestorSubasta.enviarMensajeIndividual("Oferta rechazada. La oferta realizada no supera el monto de la oferta mayor", objectOut);
+        }
     }
 }
 

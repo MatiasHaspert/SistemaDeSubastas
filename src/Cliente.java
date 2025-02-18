@@ -131,7 +131,7 @@ public class Cliente {
                     System.out.println("====================================================================");
                     System.out.println("                 [Notificacion del servidor]\n" + mensaje);
                     System.out.println("====================================================================");
-                    System.out.print("[Opcion (1 | 2)]\n");
+                    System.out.print("[Opcion (1 | 2)] > ");
                     String msg = (String) mensaje;
                     if(msg.contains("Ya hay una subasta activa") || msg.contains("Se ha iniciado una subasta")
                             || msg.contains("Hay una subasta en curso") || msg.contains("Ya hay un subastador")){
