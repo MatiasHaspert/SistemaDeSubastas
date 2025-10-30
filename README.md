@@ -77,7 +77,7 @@ El servidor crea un **nuevo hilo por cada cliente conectado**, permitiendo inter
   ```bash
   javac cliente/Cliente.java
   java cliente.Cliente
-
+  ```
 2. Ingresar la IP y puerto del servidor.
 
 3. Elegir el rol (subastador o participante) y comenzar la interacción.
@@ -102,3 +102,4 @@ El servidor crea un **nuevo hilo por cada cliente conectado**, permitiendo inter
 Octavio Pendino, Matías Haspert
 Proyecto final de Taller de programación III – Comunicación Cliente/Servidor
 📅 Año: 2024
+
