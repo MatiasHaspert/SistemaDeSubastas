@@ -84,22 +84,23 @@ El servidor crea un **nuevo hilo por cada cliente conectado**, permitiendo inter
 
 ### 🧠 Conceptos aplicados
 
--Sockets TCP/IP: comunicación bidireccional entre procesos.
--Programación concurrente: manejo de múltiples clientes en paralelo con Thread.
--Sincronización y gestión de recursos compartidos (por ejemplo, acceso a la lista de subastas).
--Diseño modular y orientado a objetos.
--Separación de responsabilidades: lógica de red, modelo de dominio y presentación.
+  - Sockets TCP/IP: comunicación bidireccional entre procesos.
+  - Programación concurrente: manejo de múltiples clientes en paralelo con Thread.
+  - Sincronización y gestión de recursos compartidos (por ejemplo, acceso a la lista de subastas).
+  - Diseño modular y orientado a objetos.
+  - Separación de responsabilidades: lógica de red, modelo de dominio y presentación.
 
 ### 💡 Mejoras futuras
 
--Persistencia de subastas en base de datos o archivo.
--Interfaz gráfica para clientes (JavaFX / Swing).
--Autenticación de usuarios y roles.
--Logs del servidor y monitoreo de conexiones.
--Subastas en tiempo real con interfaz dinámica.
+  - Persistencia de subastas en base de datos o archivo.
+  - Interfaz gráfica para clientes (JavaFX / Swing).
+  - Autenticación de usuarios y roles.
+  - Logs del servidor y monitoreo de conexiones.
+  - Subastas en tiempo real con interfaz dinámica.
 
-## 👨‍💻 Autores
+### 👨‍💻 Autores
 Octavio Pendino, Matías Haspert
 Proyecto final de Taller de programación III – Comunicación Cliente/Servidor
-📅 Año: 2024
+### 📅 Año: 2024
+
 
