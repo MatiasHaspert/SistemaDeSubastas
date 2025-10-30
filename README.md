@@ -99,8 +99,9 @@ El servidor crea un **nuevo hilo por cada cliente conectado**, permitiendo inter
   - Subastas en tiempo real con interfaz dinámica.
 
 ### 👨‍💻 Autores
-Octavio Pendino, Matías Haspert
-Proyecto final de Taller de programación III – Comunicación Cliente/Servidor
+  - Octavio Pendino, Matías Haspert
+  - Proyecto final de Taller de programación III – Comunicación Cliente/Servidor
 ### 📅 Año: 2024
+
 
 
