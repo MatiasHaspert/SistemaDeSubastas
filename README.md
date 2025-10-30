@@ -82,7 +82,7 @@ El servidor crea un **nuevo hilo por cada cliente conectado**, permitiendo inter
 
 3. Elegir el rol (subastador o participante) y comenzar la interacción.
 
-### 🧠 Conceptos aplicados
+## 🧠 Conceptos aplicados
 
   - Sockets TCP/IP: comunicación bidireccional entre procesos.
   - Programación concurrente: manejo de múltiples clientes en paralelo con Thread.
@@ -90,7 +90,7 @@ El servidor crea un **nuevo hilo por cada cliente conectado**, permitiendo inter
   - Diseño modular y orientado a objetos.
   - Separación de responsabilidades: lógica de red, modelo de dominio y presentación.
 
-### 💡 Mejoras futuras
+## 💡 Mejoras futuras
 
   - Persistencia de subastas en base de datos o archivo.
   - Interfaz gráfica para clientes (JavaFX / Swing).
@@ -98,10 +98,11 @@ El servidor crea un **nuevo hilo por cada cliente conectado**, permitiendo inter
   - Logs del servidor y monitoreo de conexiones.
   - Subastas en tiempo real con interfaz dinámica.
 
-### 👨‍💻 Autores
+## 👨‍💻 Autores
   - Octavio Pendino, Matías Haspert
   - Proyecto final de Taller de programación III – Comunicación Cliente/Servidor
 ### 📅 Año: 2024
+
 
 
 
